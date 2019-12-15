@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AudienciaSchedule>
+	<salas>
+		<id_sala>1</id_sala>
+		<calendarizable>true</calendarizable>
+	</salas>
+	<audiencias>
+		<juez>
+			<id_juez>1</id_juez>
+		</juez>
+		<fiscal>
+			<id_fiscal>2</id_fiscal>
+		</fiscal>
+		<defensor>
+			<id_defensor>3</id_defensor>
+		</defensor>
+		<tipo>Lento</tipo>
+		<fecha_solicutud>01-11-1111</fecha_solicutud>
+		<duracion>90</duracion>
+		<id_audiencia>1</id_audiencia>
+	</audiencias>
+	<notification_url>asd</notification_url>
+	<created>2019-12-15 01:45:31.546838</created>
+	<_id>5df5903bc45d27188035745f</_id>
+	<juez_list>
+		<juez>
+			<id_juez>1</id_juez>
+		</juez>
+	</juez_list>
+	<fiscal_list>
+		<fiscal>
+			<id_fiscal>2</id_fiscal>
+		</fiscal>
+	</fiscal_list>
+	<defensor_list>
+		<defensor>
+			<id_defensor>3</id_defensor>
+		</defensor>
+	</defensor_list>
+</AudienciaSchedule>

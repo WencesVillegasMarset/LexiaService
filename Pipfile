@@ -12,6 +12,9 @@ pymongo = "*"
 requests = "*"
 celery = "*"
 python-dotenv = "*"
+redis = "*"
+rq = "*"
+xmltodict = "*"
 
 [requires]
 python_version = "3.8"
