@@ -1,40 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AudienciaSchedule>
-	<salas>
-		<id_sala>1</id_sala>
-		<calendarizable>true</calendarizable>
-	</salas>
-	<audiencias>
+	<notificationUrl>asd</notificationUrl>
+	<created>2019-12-16 18:49:36.679661</created>
+	<_id>5df7d1c0922a420f9c6f831c</_id>
+	<juezList>
 		<juez>
-			<id_juez>1</id_juez>
+			<idJuez>1</idJuez>
 		</juez>
+	</juezList>
+	<fiscalList>
 		<fiscal>
-			<id_fiscal>2</id_fiscal>
+			<idFiscal>2</idFiscal>
 		</fiscal>
+	</fiscalList>
+	<asesorList>
+	</asesorList>
+	<querellanteList>
+	</querellanteList>
+	<defensorList>
 		<defensor>
-			<id_defensor>3</id_defensor>
+			<idDefensor>9</idDefensor>
 		</defensor>
-		<tipo>Lento</tipo>
-		<fecha_solicutud>01-11-1111</fecha_solicutud>
-		<duracion>90</duracion>
-		<id_audiencia>1</id_audiencia>
-	</audiencias>
-	<notification_url>asd</notification_url>
-	<created>2019-12-15 01:45:31.546838</created>
-	<_id>5df5903bc45d27188035745f</_id>
-	<juez_list>
-		<juez>
-			<id_juez>1</id_juez>
-		</juez>
-	</juez_list>
-	<fiscal_list>
-		<fiscal>
-			<id_fiscal>2</id_fiscal>
-		</fiscal>
-	</fiscal_list>
-	<defensor_list>
 		<defensor>
-			<id_defensor>3</id_defensor>
+			<idDefensor>3</idDefensor>
 		</defensor>
-	</defensor_list>
+	</defensorList>
+	<roomList>
+		<room>
+			<idSala>1</idSala>
+			<calendarizable>true</calendarizable>
+		</room>
+		<room>
+			<idSala>3</idSala>
+			<calendarizable>false</calendarizable>
+		</room>
+	</roomList>
+	<audienciaList>
+		<audiencia>
+			<tipo>Lento</tipo>
+			<riesgosa>false</riesgosa>
+			<detenido>true</detenido>
+			<fechaSolicutud>01-11-1111</fechaSolicutud>
+			<duracion>90</duracion>
+			<id>1</id>
+			<juezList>
+				<juez>
+					<idJuez>1</idJuez>
+				</juez>
+			</juezList>
+			<fiscalList>
+				<fiscal>
+					<idFiscal>2</idFiscal>
+				</fiscal>
+			</fiscalList>
+			<defensorList>
+				<defensor>
+					<idDefensor>3</idDefensor>
+				</defensor>
+				<defensor>
+					<idDefensor>9</idDefensor>
+				</defensor>
+			</defensorList>
+		</audiencia>
+	</audienciaList>
+	<audienciaFijadaList>
+	</audienciaFijadaList>
 </AudienciaSchedule>

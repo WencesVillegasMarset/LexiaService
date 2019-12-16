@@ -4,7 +4,7 @@ import datetime
 import app.utils.validator as validator
 
 SALA_LIST_SCHEMA = {
-    "id_sala": {
+    "idSala": {
         "required": True,
         "type": numbers.Integral,
     },
@@ -15,41 +15,41 @@ SALA_LIST_SCHEMA = {
 }
 
 SALA_SCHEMA = {
-    "id_sala": {
+    "idSala": {
         "required": True,
         "type": numbers.Integral,
     }
 }
 
 JUEZ_SCHEMA = {
-    "id_juez": {
+    "idJuez": {
         "required": True,
         "type": numbers.Integral,
     }
 }
 
 DEFENSOR_SCHEMA = {
-    "id_defensor": {
+    "idDefensor": {
         "required": True,
         "type": numbers.Integral,
     }
 }
 
 FISCAL_SCHEMA = {
-    "id_fiscal": {
+    "idFiscal": {
         "required": True,
         "type": numbers.Integral,
     }
 }
 QUERELLANTE_SCHEMA = {
-    "id_querellante": {
+    "idQuerellante": {
         "required": True,
         "type": numbers.Integral,
     }
 }
 
 ASESOR_SCHEMA = {
-    "id_asesor": {
+    "idAsesor": {
         "required": True,
         "type": numbers.Integral,
     }
@@ -86,11 +86,19 @@ AUDIENCIA_SCHEMA = {
         'minQuantity': 0,
         "childSchema": DEFENSOR_SCHEMA
     },
+    'riesgosa': {
+        "required": True,
+        "type": bool,
+    },
+    'detenido': {
+        "required": True,
+        "type": bool,
+    },
     'tipo': {
         "required": True,
         "type": str,
     },
-    'fecha_solicutud': {
+    'fechaSolicutud': {
         "required": True,
         "type": str,
     },
@@ -98,7 +106,7 @@ AUDIENCIA_SCHEMA = {
         "required": True,
         "type": numbers.Integral,
     },
-    'id_audiencia': {
+    'id': {
         "required": True,
         "type": str,
     }
@@ -139,15 +147,23 @@ AUDIENCIA_FIJADA_SCHEMA = {
             "required": True,
             "type": str,
         },
-        'fecha_solicutud': {
+        'riesgosa': {
+            "required": True,
+            "type": bool,
+        },
+        'detenido': {
+            "required": True,
+            "type": bool,
+        },
+        'fechaSolicutud': {
             "required": True,
             "type": str,
         },
-        'fecha_realizacion': {
+        'fechaRealizacion': {
             "required": True,
             "type": str,
         },
-        'hora_comienzo': {
+        'horaComienzo': {
             "required": True,
             "type": str,
         },
@@ -155,36 +171,36 @@ AUDIENCIA_FIJADA_SCHEMA = {
             "required": True,
             "type": numbers.Integral,
         },
-        'id_sala': {
+        'idSala': {
             "required": True,
             "type": numbers.Integral,
         },
-        'id_audiencia': {
+        'id': {
             "required": True,
             "type": str,
         }
 }
 
 SOLCITUD_SCHEMA = {
-    "salas": {
+    "sala": {
         "required": True,
         "type": list,
         'minQuantity': 1,
         "childSchema": SALA_LIST_SCHEMA
     },
-    "audiencias": {
+    "audiencia": {
         "required": True,
         "type": list,
         'minQuantity': 1,
         "childSchema": AUDIENCIA_SCHEMA
     },
-    "audiencias_fijadas": {
+    "audienciaFijada": {
         "required": True,
         "type": list,
         'minQuantity': 0,
         "childSchema": AUDIENCIA_FIJADA_SCHEMA
     },
-    'notification_url': {
+    'notificationUrl': {
         "required": True,
         "type": str,
     }

@@ -60,13 +60,4 @@ def init_routes(app):
     def consultarCalendarizacionSandbox(solicitudId):
         pass
 
-
-    @app.route('/v1/feriados/', methods=['POST'])
-    def cargarFeriados():
-        pass
-
-    @app.route('/v1/feriados/<anio>', methods=['GET'])
-    def consultarFeriados(anio):
-        pass
-
     return app

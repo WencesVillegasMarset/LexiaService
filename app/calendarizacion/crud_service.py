@@ -1,5 +1,7 @@
 import app.utils.database as db
 import datetime
+import bson
+import app.utils.errors as error
 
 
 def crearSolicitud(params):
@@ -10,3 +12,13 @@ def crearSolicitud(params):
     solicitudId = db.solicitudes.insert_one(params).inserted_id
 
     return solicitudId
+
+
+def getSolicitud(solicitudId):
+    try:
+        result = db.solicitudes.find_one({"_id": bson.ObjectId(solicitudId)})
+        if (not result):
+            raise error.InvalidArgument("_id", "Solicitud does not exists")
+        return result
+    except Exception:
+        raise error.InvalidArgument("_id", "Invalid object id")

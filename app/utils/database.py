@@ -11,3 +11,4 @@ db = client['calendarizaciones']
 solicitudes = db.solicitudes
 soluciones = db.soluciones
 feriados = db.feriados
+scores = db.scores
