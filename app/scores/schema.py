@@ -2,19 +2,20 @@ import app.utils.errors as error
 import datetime
 import app.utils.validator as validator
 
+
 SINGLE_SCORE_SCHEMA = {
     "nombreRestriccion": {
         "required": True,
         "type": str,
     },
-    "valorScore": {
+    "pesosRestriccion": {
         "required": True,
         "type": str,
     }
 }
 
 SCORES_SCHEMA = {
-    "scoreList": {
+    "constraintConfiguration": {
         "required": True,
         "minQuantity": 1,
         "type": list,
@@ -28,13 +29,6 @@ def validarScores(documento):
 
     if (len(err) > 0):
         raise error.MultipleArgumentException(err)
-
-
-def validarScore(score):
-    if score:
-        pass
-    else:
-        raise error.InvalidArgument('anio', 'Formato de año invalido')
 
 
 def newScores():

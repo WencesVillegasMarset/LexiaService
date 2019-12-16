@@ -98,6 +98,14 @@ AUDIENCIA_SCHEMA = {
         "required": True,
         "type": str,
     },
+    'almafuerte': {
+        "required": True,
+        "type": bool,
+    },
+    'boulonge_sur_mer': {
+        "required": True,
+        "type": bool,
+    },
     'fechaSolicutud': {
         "required": True,
         "type": str,
@@ -113,72 +121,80 @@ AUDIENCIA_SCHEMA = {
 }
 
 AUDIENCIA_FIJADA_SCHEMA = {
-        "juez": {
-            "required": True,
-            "type": list,
-            'minQuantity': 1,
-            "childSchema": JUEZ_SCHEMA
-        },
-        "defensor": {
-            "required": True,
-            "type": list,
-            'minQuantity': 1,
-            "childSchema": DEFENSOR_SCHEMA
-        },
-        "fiscal": {
-            "required": True,
-            "type": list,
-            'minQuantity': 1,
-            "childSchema": FISCAL_SCHEMA
-        },
-        "querellante": {
-            "required": False,
-            "type": list,
-            'minQuantity': 1,
-            "childSchema": QUERELLANTE_SCHEMA
-        },
-        "asesor": {
-            "required": False,
-            "type": list,
-            'minQuantity': 1,
-            "childSchema": DEFENSOR_SCHEMA
-        },
-        'tipo': {
-            "required": True,
-            "type": str,
-        },
-        'riesgosa': {
-            "required": True,
-            "type": bool,
-        },
-        'detenido': {
-            "required": True,
-            "type": bool,
-        },
-        'fechaSolicutud': {
-            "required": True,
-            "type": str,
-        },
-        'fechaRealizacion': {
-            "required": True,
-            "type": str,
-        },
-        'horaComienzo': {
-            "required": True,
-            "type": str,
-        },
-        'duracion': {
-            "required": True,
-            "type": numbers.Integral,
-        },
-        'idSala': {
-            "required": True,
-            "type": numbers.Integral,
-        },
-        'id': {
-            "required": True,
-            "type": str,
-        }
+    "juez": {
+        "required": True,
+        "type": list,
+        'minQuantity': 1,
+        "childSchema": JUEZ_SCHEMA
+    },
+    "defensor": {
+        "required": True,
+        "type": list,
+        'minQuantity': 1,
+        "childSchema": DEFENSOR_SCHEMA
+    },
+    "fiscal": {
+        "required": True,
+        "type": list,
+        'minQuantity': 1,
+        "childSchema": FISCAL_SCHEMA
+    },
+    "querellante": {
+        "required": False,
+        "type": list,
+        'minQuantity': 1,
+        "childSchema": QUERELLANTE_SCHEMA
+    },
+    "asesor": {
+        "required": False,
+        "type": list,
+        'minQuantity': 1,
+        "childSchema": DEFENSOR_SCHEMA
+    },
+    'tipo': {
+        "required": True,
+        "type": str,
+    },
+    'almafuerte': {
+        "required": True,
+        "type": bool,
+    },
+    'boulonge_sur_mer': {
+        "required": True,
+        "type": bool,
+    },
+    'riesgosa': {
+        "required": True,
+        "type": bool,
+    },
+    'detenido': {
+        "required": True,
+        "type": bool,
+    },
+    'fechaSolicutud': {
+        "required": True,
+        "type": str,
+    },
+    'fechaRealizacion': {
+        "required": True,
+        "type": str,
+    },
+    'horaComienzo': {
+        "required": True,
+        "type": str,
+    },
+    'duracion': {
+        "required": True,
+        "type": numbers.Integral,
+    },
+    'idSala': {
+        "required": True,
+        "type": numbers.Integral,
+    },
+    'id': {
+        "required": True,
+        "type": str,
+    }
 }
 
 SOLCITUD_SCHEMA = {
@@ -200,7 +216,7 @@ SOLCITUD_SCHEMA = {
         'minQuantity': 0,
         "childSchema": AUDIENCIA_FIJADA_SCHEMA
     },
-    'notificationUrl': {
+    'urlNotificacion': {
         "required": True,
         "type": str,
     }
@@ -216,13 +232,9 @@ def validarSolicitud(documento):
 
 def newSolicitud():
     return {
-        "jueces": [],
-        "defensores": [],
-        "fiscales": [],
-        "querellantes": [],
-        "asesores": [],
-        "salas": [],
-        "audiencias": [],
+        "sala": [],
+        "audiencia": [],
+        "audienciaFijada": [],
         'created': datetime.datetime.utcnow(),
-        'notification_url': '',
+        'urlNotificacion': '',
     }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AudienciaSchedule>
-	<notificationUrl>asd</notificationUrl>
-	<created>2019-12-16 18:49:36.679661</created>
-	<_id>5df7d1c0922a420f9c6f831c</_id>
+	<urlNotificacion>asd</urlNotificacion>
+	<created>2019-12-16 21:36:14.672540</created>
+	<_id>5df7f8cec14da68c3b8f5940</_id>
 	<juezList>
 		<juez>
 			<idJuez>1</idJuez>
@@ -39,8 +39,10 @@
 		<audiencia>
 			<tipo>Lento</tipo>
 			<riesgosa>false</riesgosa>
+			<almafuerte>true</almafuerte>
+			<boulonge_sur_mer>true</boulonge_sur_mer>
 			<detenido>true</detenido>
-			<fechaSolicutud>01-11-1111</fechaSolicutud>
+			<fechaSolicutud>2021-12-30</fechaSolicutud>
 			<duracion>90</duracion>
 			<id>1</id>
 			<juezList>

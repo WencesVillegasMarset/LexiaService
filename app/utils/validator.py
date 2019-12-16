@@ -1,5 +1,4 @@
-
-# import re
+import re
 
 
 def validateSchema(schema, document):
@@ -10,14 +9,10 @@ def validateSchema(schema, document):
             "strProperty": {
                 "required": True,
                 "type": str,
-                "minLen": 60
-                "maxLen": 60
                 },
             "numberProperty": {
                 "required": False,
                 "type": numbers.Integral | numbers.Real,
-                "min": 0
-                "max": 0
                 },...
         }
     retorna: Lista de errores
@@ -51,6 +46,9 @@ def validateSchema(schema, document):
                         schema_prop['childSchema'], document_field)
                     errors = {**errors, **sub_errors}
                     continue
+            if schema_prop['type'] is str:
+                sub_errors = validateStringField(schema_key, document_field)
+                errors = {**errors, **sub_errors}
             # if schema_prop['type'] is str:
             # TODO : Definir validadores para fechas
             # y otras strings especificas
@@ -67,3 +65,43 @@ def validateSchemaList(schema, document):
         errors = {**errors, **sub_errors}
 
     return errors
+
+
+def validateStringField(key_name, field_value):
+
+    errors = {}
+
+    KEY_PREFIXES = {
+        'fecha': __valFecha,
+        'hora': __valHora,
+        'pesos': __valPesos
+    }
+    for prefix in KEY_PREFIXES.keys():
+        if key_name.startswith(prefix):
+            func = KEY_PREFIXES[prefix]
+            if not func(field_value):
+                errors[key_name] = "Invalid Format"
+                break
+            break
+    return errors
+
+
+def __valFecha(value):
+    res = re.search(r"(19|20)\d\d[-.](0[1-9]|1[012])[-.](0[1-9]|[12][0-9]|3[01])", value)
+    if res is None:
+        return False
+    return True
+
+
+def __valHora(value):
+    res = re.search(r"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", value)
+    if res is None:
+        return False
+    return True
+
+
+def __valPesos(value):
+    res = re.search(r"^\d*[0-9]*/\d*[0-9]*/\d*[0-9]*/\d*[0-9]+$", value)
+    if res is None:
+        return False
+    return True

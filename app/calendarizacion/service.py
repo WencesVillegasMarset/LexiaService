@@ -45,7 +45,6 @@ def toXMLStructure(data):
     }
     data['audienciaFijadaList'] = temp
     del data['audienciaFijada']
-    
 
     return data
 
