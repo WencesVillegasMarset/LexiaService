@@ -19,7 +19,7 @@ SCORES_SCHEMA = {
         "required": True,
         "minQuantity": 1,
         "type": list,
-        "child_schema": SINGLE_SCORE_SCHEMA
+        "childSchema": SINGLE_SCORE_SCHEMA
     }
 }
 

@@ -49,9 +49,6 @@ def validateSchema(schema, document):
             if schema_prop['type'] is str:
                 sub_errors = validateStringField(schema_key, document_field)
                 errors = {**errors, **sub_errors}
-            # if schema_prop['type'] is str:
-            # TODO : Definir validadores para fechas
-            # y otras strings especificas
 
     return errors
 
@@ -101,7 +98,7 @@ def __valHora(value):
 
 
 def __valPesos(value):
-    res = re.search(r"^\d*[0-9]*/\d*[0-9]*/\d*[0-9]*/\d*[0-9]+$", value)
+    res = re.search(r"^\d*[0-9]*/\d*[0-9]*/\d*[0-9]*/\d*[0-9]*/\d*[0-9]+$", value)
     if res is None:
         return False
     return True
