@@ -1,11 +1,13 @@
 import app.scores.crud_service as scores
 import app.utils.errors as errors
-
+import xmltodict
 
 XML_TAG_MAPPINGS = {
     'sala': 'room',
     'salaList': 'roomList',
-    'idSala': "idRoom"
+    'idSala': "idRoom",
+    'horarioNormalJuez': 'juezTimeGrainCommon',
+    'indisposicionJuez': 'juezTimeGrainSpecial'
 }
 
 ACTOR_LIST = ['juez', 'fiscal', 'asesor', 'querellante', 'defensor']
@@ -69,6 +71,19 @@ def toXMLStructure(data):
         data['constraintConfiguration'] = temp
     except Exception as err:
         errors.handleUnknown(err)
+
+    temp = {
+        'Jueces': {
+            'Juez': data['horarioNormalJuez']
+        }
+    }
+    data['juezTimeGrainCommon'] = temp
+    del data['horarioNormalJuez']
+    temp = {
+        'JuecesSpecial': data['indisposicionJuez']
+    }
+    data['juezTimeGrainSpecial'] = temp
+    del data['indisposicionJuez']
     return data
 
 
@@ -108,5 +123,32 @@ def _extractLists(data):
     return data
 
 
-def xmlSolutionToDict():
-    pass
+def xmlSolutionToDict(xml_path):
+    final_format = {
+        'audiencia': [],
+    }
+    with open(xml_path) as fd:
+        res = xmltodict.parse(fd.read())
+    for audiencia in res['AudienciaSchedule']['AudienciaAssignment']:
+        aud = {
+            'fijada': audiencia['pinned'],
+            'idSala': audiencia['room']['idRoom'],
+            'id': audiencia['id'],
+            'fechaAudiencia':  audiencia['startingTimeGrain']['day']['date'],
+            'horaAudiencia':  audiencia['startingTimeGrain']['startingMinuteOfDay']
+        }
+        aud['horaAudiencia'] = __decimalToHs(int(aud['horaAudiencia'])/60)
+        final_format['audiencia'].append(aud)
+    return final_format
+
+
+def __decimalToHs(hours):
+    hours = round(hours, 2)
+    int_dec = str(hours).split('.')
+    int_dec[1] = str(int(int(int_dec[1])/10*6))
+    return int_dec[0] + ':' + int_dec[1]
+
+
+if __name__ == "__main__":
+    res = __decimalToHs(610/60)
+    print(res)

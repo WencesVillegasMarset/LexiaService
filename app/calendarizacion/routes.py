@@ -1,5 +1,5 @@
 import flask
-from app.utils.tasks import parse_to_xml
+from app.utils.tasks import run_solver
 import app as application
 import app.calendarizacion.schema as restValidator
 import app.utils.serialize as json
@@ -40,7 +40,7 @@ def init_routes(app):
             params = service.toSolverFormat(params)
             solicitud = {}
             solicitud['AudienciaSchedule'] = params
-            application.q.enqueue(parse_to_xml, solicitud)
+            application.q.enqueue(run_solver, solicitud, solicitudId)
             return json.dic_to_json({'solicitudId': solicitudId})
 
         except Exception as error:
@@ -48,16 +48,24 @@ def init_routes(app):
 
     @app.route('/v1/solicitud/<solicitudId>', methods=['GET'])
     def consultarSolicitud(solicitudId):
-        pass
+        try:
+            solicitud = crud.getSolicitud(solicitudId)
+            return json.dic_to_json(solicitud)
 
+        except Exception as error:
+            return errors.handleError(error)
 
     @app.route('/v1/solicitud/sandbox', methods=['POST'])
     def solicitarCalendarizacionSandbox():
-        pass
-
+        return json.dic_to_json({'error': 'Not Implemented'})
 
     @app.route('/v1/solucion/<solicitudId>', methods=['GET'])
-    def consultarCalendarizacionSandbox(solicitudId):
-        pass
+    def consultarCalendarizacion(solicitudId):
+        try:
+            solucion = crud.getSolucion(solicitudId)
+            return json.dic_to_json(solucion)
+
+        except Exception as error:
+            return errors.handleError(error)
 
     return app

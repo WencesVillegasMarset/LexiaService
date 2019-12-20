@@ -197,12 +197,81 @@ AUDIENCIA_FIJADA_SCHEMA = {
     }
 }
 
+WORKDAY_SCHEMA = {
+    'diaSemana': {
+        "required": True,
+        "type": int,
+    },
+    'horaInicio': {
+        "required": True,
+        "type": str,
+    },
+    'horaFin': {
+        "required": True,
+        "type": str,
+    }
+}
+
+WORKDAY_SPECIAL_SCHEMA = {
+    'fecha': {
+        "required": True,
+        "type": str,
+    },
+    'horaInicio': {
+        "required": True,
+        "type": str,
+    },
+    'horaFin': {
+        "required": True,
+        "type": str,
+    }
+}
+
+JUEZ_TIME_COMMON_SCHEMA = {
+    'idJuez': {
+        "required": True,
+        "type": int,
+    },
+    'dia': {
+        "required": True,
+        "type": list,
+        'minQuantity': 1,
+        "childSchema": WORKDAY_SCHEMA
+    }
+}
+
+JUEZ_TIME_SPECIAL_SCHEMA = {
+    'idJuez': {
+        "required": True,
+        "type": int,
+    },
+    'dia': {
+        "required": True,
+        "type": list,
+        'minQuantity': 1,
+        "childSchema": WORKDAY_SPECIAL_SCHEMA
+    }
+}
+
+
 SOLCITUD_SCHEMA = {
     "sala": {
         "required": True,
         "type": list,
         'minQuantity': 1,
         "childSchema": SALA_LIST_SCHEMA
+    },
+    'horarioNormalJuez': {
+        "required": True,
+        "type": list,
+        'minQuantity': 1,
+        "childSchema": JUEZ_TIME_COMMON_SCHEMA
+    },
+    'indisposicionJuez': {
+        "required": True,
+        "type": list,
+        'minQuantity': 0,
+        "childSchema": JUEZ_TIME_SPECIAL_SCHEMA
     },
     "audiencia": {
         "required": True,

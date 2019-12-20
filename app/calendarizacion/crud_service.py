@@ -22,3 +22,14 @@ def getSolicitud(solicitudId):
         return result
     except Exception:
         raise error.InvalidArgument("_id", "Invalid object id")
+
+
+def getSolucion(solicitudId):
+    try:
+        query_params = {"solicitudId": bson.ObjectId(solicitudId)}
+        result = db.soluciones.find_one(query_params)
+        if (not result):
+            raise error.InvalidArgument("_id", "Solucion does not exists")
+        return result
+    except Exception:
+        raise error.InvalidArgument("_id", "Invalid object id")
