@@ -13,6 +13,15 @@ def crearSolicitud(params):
 
     return solicitudId
 
+def crearSolucion(params, solicitudId):
+
+    # Actualizamos los valores validos a actualizar
+    # solicitud.update(params)
+    params['created'] = datetime.datetime.utcnow()
+    params['solicitudId'] = solicitudId
+    solucionId = db.soluciones.insert_one(params).inserted_id
+
+    return solucionId
 
 def getSolicitud(solicitudId):
     try:

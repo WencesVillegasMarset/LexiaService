@@ -11,6 +11,14 @@ SALA_LIST_SCHEMA = {
     "calendarizable": {
         "required": True,
         "type": bool,
+    },
+    'almafuerte': {
+        "required": True,
+        "type": bool,
+    },
+    'boulonge_sur_mer': {
+        "required": True,
+        "type": bool,
     }
 }
 
@@ -86,6 +94,10 @@ AUDIENCIA_SCHEMA = {
         'minQuantity': 0,
         "childSchema": DEFENSOR_SCHEMA
     },
+    'aLaTarde': {
+        "required": True,
+        "type": bool,
+    },
     'riesgosa': {
         "required": True,
         "type": bool,
@@ -96,7 +108,7 @@ AUDIENCIA_SCHEMA = {
     },
     'tipo': {
         "required": True,
-        "type": str,
+        "type": numbers.Integral,
     },
     'almafuerte': {
         "required": True,
@@ -106,7 +118,7 @@ AUDIENCIA_SCHEMA = {
         "required": True,
         "type": bool,
     },
-    'fechaSolicutud': {
+    'fechaSolicitud': {
         "required": True,
         "type": str,
     },
@@ -153,7 +165,11 @@ AUDIENCIA_FIJADA_SCHEMA = {
     },
     'tipo': {
         "required": True,
-        "type": str,
+        "type": numbers.Integral,
+    },
+    'aLaTarde': {
+        "required": True,
+        "type": bool,
     },
     'almafuerte': {
         "required": True,
@@ -171,7 +187,11 @@ AUDIENCIA_FIJADA_SCHEMA = {
         "required": True,
         "type": bool,
     },
-    'fechaSolicutud': {
+    'externa': {
+        "required": True,
+        "type": bool,
+    },
+    'fechaSolicitud': {
         "required": True,
         "type": str,
     },
@@ -197,20 +217,6 @@ AUDIENCIA_FIJADA_SCHEMA = {
     }
 }
 
-WORKDAY_SCHEMA = {
-    'diaSemana': {
-        "required": True,
-        "type": int,
-    },
-    'horaInicio': {
-        "required": True,
-        "type": str,
-    },
-    'horaFin': {
-        "required": True,
-        "type": str,
-    }
-}
 
 WORKDAY_SPECIAL_SCHEMA = {
     'fecha': {
@@ -227,16 +233,31 @@ WORKDAY_SPECIAL_SCHEMA = {
     }
 }
 
-JUEZ_TIME_COMMON_SCHEMA = {
+JUEZ_TIME_LICENSE_SCHEMA = {
+    'fechaInicio': {
+        "required": True,
+        "type": str,
+    },
+    'fechaFin': {
+        "required": True,
+        "type": str,
+    },
     'idJuez': {
         "required": True,
         "type": int,
+    }
+}
+
+JUEZ_TIME_AFTERNOON_SCHEMA = {
+    'fecha': {
+        "required": True,
+        "type": str,
     },
-    'dia': {
+    'juez': {
         "required": True,
         "type": list,
         'minQuantity': 1,
-        "childSchema": WORKDAY_SCHEMA
+        "childSchema": JUEZ_SCHEMA
     }
 }
 
@@ -261,11 +282,17 @@ SOLCITUD_SCHEMA = {
         'minQuantity': 1,
         "childSchema": SALA_LIST_SCHEMA
     },
-    'horarioNormalJuez': {
+    'turnoTardeJuez': {
         "required": True,
         "type": list,
         'minQuantity': 1,
-        "childSchema": JUEZ_TIME_COMMON_SCHEMA
+        "childSchema": JUEZ_TIME_AFTERNOON_SCHEMA
+    },
+    'licenciaJuez': {
+        "required": True,
+        "type": list,
+        'minQuantity': 1,
+        "childSchema": JUEZ_TIME_LICENSE_SCHEMA
     },
     'indisposicionJuez': {
         "required": True,

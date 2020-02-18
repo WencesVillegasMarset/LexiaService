@@ -2,91 +2,154 @@ import app.scores.crud_service as scores
 import app.utils.errors as errors
 import xmltodict
 
-XML_TAG_MAPPINGS = {
-    'sala': 'room',
-    'salaList': 'roomList',
-    'idSala': "idRoom",
-    'horarioNormalJuez': 'juezTimeGrainCommon',
-    'indisposicionJuez': 'juezTimeGrainSpecial'
-}
 
 ACTOR_LIST = ['juez', 'fiscal', 'asesor', 'querellante', 'defensor']
 
 
 def toSolverFormat(data):
-    data = _extractLists(data)
-    final_structure = toXMLStructure(data)
-    return toXMLKeys(final_structure)
+    '''
+        Generar solver_data
+            Lista de Audiencias, Lista de Rooms y ConstraintConfiguration
+        Generar xml jueces
+            JuezTimeGrainAfternoon, JuezTimeGrainLicense, JuezTimeGrainSpecial
+    '''
+    juez_data = {
+        'afternoon': _juezAfternoonParser(data['turnoTardeJuez']),
+        'license': _juezLicenseParser(data['licenciaJuez']),
+        'special': _juezSpecialParser(data['indisposicionJuez'])
+    }
+    solver_data = _audienciaScheduleParser(data)
+
+    return solver_data, juez_data
 
 
-def toXMLStructure(data):
-    for actor in ACTOR_LIST:
-        for audiencia in data['audiencia']:
-            if actor not in audiencia.keys():
-                continue
-            audiencia[actor+'List'] = {
-                actor: audiencia[actor]
-            }
-            del audiencia[actor]
-        for audiencia in data['audienciaFijada']:
-            if actor not in audiencia.keys():
-                continue
-            audiencia[actor+'List'] = {
-                actor: audiencia[actor]
-            }
-            del audiencia[actor]
-    room_list = []
-    possible_rooms_list = [] 
-    for sala in data['sala']:
-        if sala["calendarizable"]:
-            del sala["calendarizable"]
-            possible_rooms_list.append(sala)
-        else:
-            del sala["calendarizable"]
-        room_list.append(sala)
+def _juezAfternoonParser(data):
+    sub_schema = []
+    for fecha in data:
+        fecha['date'] = fecha.pop('fecha')
+        temp = {'Juez': fecha.pop('juez')}
+        for item in temp['Juez']:
+            item['id'] = item.pop('idJuez')
+        fecha['Jueces'] = temp
+        sub_schema.append(fecha)
+    xml_structure = {
+        'Days': {
+            'Day': sub_schema
+        }
+    }
+    return xmltodict.unparse(xml_structure, pretty=True)
 
-    data['salaList'] = {
-        'room': room_list,
+
+def _juezLicenseParser(data):
+    sub_schema = []
+    for juez in data:
+        juez['id'] = juez.pop('idJuez')
+        juez['dayfrom'] = juez.pop('fechaInicio')
+        juez['dayto'] = juez.pop('fechaFin')
+        sub_schema.append(juez)
+
+    xml_structure = {
+        'Jueces': {
+            'Juez': sub_schema
+        }
     }
-    data['possibleRooms'] = {
-        'room': possible_rooms_list,
+    return xmltodict.unparse(xml_structure, pretty=True)
+
+
+def _juezSpecialParser(data):
+
+    sub_schema = []
+    for juez in data:
+        juez['id'] = juez.pop('idJuez')
+        juez['day'] = juez.pop('dia')
+        for item in juez['day']:
+            item['date'] = item.pop('fecha')
+            item['startingTime'] = item.pop('horaInicio')
+            item['endingTime'] = item.pop('horaFin')
+        sub_schema.append(juez)
+
+    xml_structure = {
+        'Jueces': {
+            'Juez': sub_schema
+        }
     }
-    del data['sala']
-    temp = {
-        'audiencia': data['audiencia']
-    }
-    data['audienciaList'] = temp
-    del data['audiencia']
-    temp = {
-        'audienciaFijada': data['audienciaFijada']
-    }
-    data['audienciaFijadaList'] = temp
-    del data['audienciaFijada']
-    try:
-        res = scores.getLatestScores()
-        data['constraintConfiguration'] = res['constraintConfiguration']
+    return xmltodict.unparse(xml_structure, pretty=True)
+
+
+def _audienciaScheduleParser(data):
+    data.pop('turnoTardeJuez')
+    data.pop('licenciaJuez')
+    data.pop('indisposicionJuez')
+    room_dict = {}
+    for room in data['sala']:
+        room['almaFuerte'] = room.pop('almafuerte')
+        room['usable'] = room.pop('calendarizable')
+        room['idRoom'] = room.pop('idSala')
+        room['boulogne'] = room.pop('boulonge_sur_mer')
+        room_dict[room['idRoom']] = room
+
+    audiencia_list = []
+    for audiencia in data['audiencia']:
         temp = {}
-        for constraint in data['constraintConfiguration']:
-            temp[constraint['nombreRestriccion']] = constraint['pesosRestriccion']
-        data['constraintConfiguration'] = temp
+        temp['id'] = audiencia.pop('id')
+        temp['audiencia'] = audiencia
+        temp['audiencia']['externa'] = False
+        temp['pinned'] = False
+
+        audiencia_list.append(temp)
+
+    for audiencia in data['audienciaFijada']:
+        temp = {}
+        temp['fechaRealizacion'] = audiencia.pop('fechaRealizacion')
+        temp['hora_comienzo'] = audiencia.pop('horaComienzo')
+        temp['id'] = audiencia.pop('id')
+        temp['audiencia'] = audiencia
+        temp['room'] = room_dict[audiencia.pop('idSala')]
+        temp['pinned'] = True
+        audiencia_list.append(temp)
+    for audiencia in audiencia_list:
+        audiencia['audiencia']['boulogne'] = audiencia['audiencia'].pop('boulonge_sur_mer')
+        audiencia['audiencia']['durationMinutes'] = audiencia['audiencia'].pop('duracion')
+        audiencia['audiencia']['fechaPedido'] = audiencia['audiencia'].pop('fechaSolicitud')
+        audiencia['audiencia']['almaFuerte'] = audiencia['audiencia'].pop('almafuerte')
+        audiencia['audiencia']['tipo'] = {'idTipo': audiencia['audiencia'].pop('tipo')}
+        if audiencia['pinned']:
+            audiencia['audiencia']['startingMinuteOfDay'] = __getStartingMinuteofDay(
+                audiencia.pop('hora_comienzo'))
+        for actor in ACTOR_LIST:
+            if actor in audiencia['audiencia'].keys():
+                temp_actor = []
+                for id_actor in audiencia['audiencia'].pop(actor):
+                    temp_actor.append(id_actor)
+                audiencia['audiencia'][actor+'List'] = {
+                    actor.capitalize(): temp_actor
+                    }
+
+    try:
+        constraint_conf = scores.getLatestScores()
+        temp = {}
+        for constraint in constraint_conf['constraintConfiguration']:
+            temp[constraint['nombreRestriccion']] = constraint[
+                'pesosRestriccion']
+        constraint_conf = temp
     except Exception as err:
         errors.handleUnknown(err)
 
-    temp = {
-        'Jueces': {
-            'Juez': data['horarioNormalJuez']
+    xml_structure = {
+        'AudienciaSchedule': {
+            'roomList': {
+                'audienciaAssignmentList': {
+                    'AudienciaAssignment': audiencia_list
+                },
+                'constraintConfiguration': constraint_conf,
+                'Room': room_dict.values(),
+            },
         }
     }
-    data['juezTimeGrainCommon'] = temp
-    del data['horarioNormalJuez']
-    temp = {
-        'JuecesSpecial': data['indisposicionJuez']
-    }
-    data['juezTimeGrainSpecial'] = temp
-    del data['indisposicionJuez']
-    return data
 
+    return xmltodict.unparse(xml_structure, pretty=True)
 
+'''
 def toXMLKeys(dictionary):
     new_dict = {}
     for key in dictionary.keys():
@@ -96,32 +159,7 @@ def toXMLKeys(dictionary):
         else:
             new_dict[new_key] = dictionary[key]
     return new_dict
-
-
-def _extractLists(data):
-    for actor in ACTOR_LIST:
-        temp = set()
-        for audiencia in data['audiencia']:
-            if actor not in audiencia.keys():
-                continue
-            for act in audiencia[actor]:
-                temp.add(act['id' + actor.capitalize()])
-
-        for audiencia in data['audienciaFijada']:
-            if actor not in audiencia.keys():
-                continue
-            for act in audiencia[actor]:
-                temp.add(act['id' + actor.capitalize()])
-        temp = list(temp)
-        for idx in range(len(temp)):
-            temp[idx] = {
-                    'id'+actor.capitalize(): temp[idx]
-                }
-        data[actor + 'List'] = {
-            actor: temp
-        }
-    return data
-
+'''
 
 def xmlSolutionToDict(xml_path):
     final_format = {
@@ -129,24 +167,39 @@ def xmlSolutionToDict(xml_path):
     }
     with open(xml_path) as fd:
         res = xmltodict.parse(fd.read())
-    for audiencia in res['AudienciaSchedule']['AudienciaAssignment']:
-        aud = {
-            'fijada': audiencia['pinned'],
-            'idSala': audiencia['room']['idRoom'],
-            'id': audiencia['id'],
-            'fechaAudiencia':  audiencia['startingTimeGrain']['day']['date'],
-            'horaAudiencia':  audiencia['startingTimeGrain']['startingMinuteOfDay']
-        }
-        aud['horaAudiencia'] = __decimalToHs(int(aud['horaAudiencia'])/60)
-        final_format['audiencia'].append(aud)
+    for key, audiencias in res['AudienciaSchedule']['audienciaAssignmentList'].items():
+        if key != 'AudienciaAssignment':
+            continue
+        for audiencia in audiencias:
+            if audiencia['pinned'] == 'false':
+                aud = {
+                    'fijada': audiencia['pinned'],
+                    'idSala': audiencia['room']['idRoom'],
+                    'id': audiencia['id'],
+                    'fechaAudiencia':  audiencia['startingTimeGrain']['day']['date'],
+                    'horaAudiencia':  audiencia['startingTimeGrain']['startingMinuteOfDay']
+                }
+                aud['horaAudiencia'] = __decimalToHs(int(aud['horaAudiencia'])/60)
+                final_format['audiencia'].append(aud)
+    
     return final_format
 
 
 def __decimalToHs(hours):
     hours = round(hours, 2)
     int_dec = str(hours).split('.')
-    int_dec[1] = str(int(int(int_dec[1])/10*6))
-    return int_dec[0] + ':' + int_dec[1]
+    int_dec[0] = int(int_dec[0])
+    int_dec[1] = int(int(int_dec[1])/10*6)
+    if int_dec[0] < 10:
+        int_dec[0] = '0{}'.format(int_dec[0])
+    if int_dec[1] < 10:
+        int_dec[1] = '0{}'.format(int_dec[1])
+    return '{}:{}'.format(int_dec[0], int_dec[1])
+
+
+def __getStartingMinuteofDay(time):
+    hours, minutes = time.split(':')
+    return int(hours) * 60 + int(minutes)
 
 
 if __name__ == "__main__":
