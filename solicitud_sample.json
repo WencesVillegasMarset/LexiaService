@@ -1,0 +1,116 @@
+{
+    "sala": [ 
+        {
+            "idSala": 1,
+            "calendarizable": true
+        },
+        {
+            "idSala": 3,
+            "calendarizable": false
+        }
+    ],
+    "audiencia": [
+        {
+            "juez": [
+                {
+                    "idJuez": 1
+                }
+            ],
+            "fiscal": [
+                {
+                    "idFiscal": 2
+                }
+            ],
+            "defensor": [
+                {
+                    "idDefensor": 3
+                },
+                {
+                    "idDefensor": 9
+                }
+            ],
+            "tipo": "Lento",
+            "riesgosa": false,
+            "almafuerte": true,
+            "boulonge_sur_mer": true,
+            "detenido": true,
+            "fechaSolicutud": "2021-12-30",
+            "duracion": 90,
+            "id": "1"
+        }
+    ],
+    "audienciaFijada": [
+        {
+            "juez": [
+                {
+                    "idJuez": 99
+                }
+            ],
+            "fiscal": [
+                {
+                    "idFiscal": 14
+                }
+            ],
+            "defensor": [
+                {
+                    "idDefensor": 3
+                },
+                {
+                    "idDefensor": 9
+                }
+            ],
+            "querellante": [
+                {
+                    "idQuerellante": 3
+                }
+            ],
+            "tipo": "urgente-detenido",
+            "riesgosa": false,
+            "almafuerte": true,
+            "boulonge_sur_mer": true,
+            "detenido": true,
+            "fechaSolicutud": "2020-11-10",
+            "fechaRealizacion": "2020-11-12",
+            "horaComienzo": "12:30",
+            "idSala": 1,
+            "duracion": 120,
+            "id": "1"
+        }
+    ],
+    "horarioNormalJuez":[
+		{"idJuez": 5,
+			"dia":[{
+				"diaSemana":1,
+				"horaInicio": "01:01",
+				"horaFin": "02:11"
+			},
+			{
+				"diaSemana":2,
+				"horaInicio": "01:01",
+				"horaFin": "02:11"
+			}]
+		},
+		{"idJuez": 9,
+			"dia":[{
+				"diaSemana":1,
+				"horaInicio": "01:01",
+				"horaFin": "02:22"
+			},
+			{
+				"diaSemana":2,
+				"horaInicio": "01:01",
+				"horaFin": "02:11"
+			}]
+		}
+	],
+	"indisposicionJuez":[
+		{
+			"idJuez": 4,
+			"dia": [{
+				"fecha": "2020/11/12",
+				"horaInicio": "15:10",
+				"horaFin": "17:50"
+			}]
+		}],
+    "urlNotificacion": "https://mydomain.com/api/webhooks/jus/mendoza/ogap-cal"
+}
