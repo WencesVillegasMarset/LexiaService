@@ -49,8 +49,8 @@ def getSolucion(solicitudId):
 def deleteSolicitud(solicitudId):
     try:
         query_params = {"_id": bson.ObjectId(solicitudId)}
-        result = db.soluciones.delete_one(query_params)
-        if (not result):
+        result = db.solicitudes.delete_one(query_params)
+        if (result.deleted_count == 0):
             raise error.InvalidArgument("_id", "Solucion does not exists")
         return result
     except Exception:
@@ -61,7 +61,7 @@ def deleteSolucion(solucionId):
     try:
         query_params = {"_id": bson.ObjectId(solucionId)}
         result = db.soluciones.delete_one(query_params)
-        if (not result):
+        if (result.deleted_count == 0):
             raise error.InvalidArgument("_id", "Solucion does not exists")
         return result
     except Exception:

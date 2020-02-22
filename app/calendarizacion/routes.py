@@ -155,7 +155,7 @@ def init_routes(app):
         except Exception as error:
             return errors.handleError(error)
     """
-    @api {delete} /v1/solicitud/:solicitudId/eliminar Eliminar Solicitud
+    @api {delete} /v1/solicitud/:solicitudId Eliminar Solicitud
     @apiName Eliminar una Solicitud de la Base de Datos(Hard Delete)
     @apiGroup Calendarizacion
 
@@ -166,7 +166,7 @@ def init_routes(app):
 
     """
 
-    @app.route('/v1/solicitud/<solicitudId>/eliminar', methods=['DELETE'])
+    @app.route('/v1/solicitud/<solicitudId>', methods=['DELETE'])
     def eliminarSolicitud(solicitudId):
         try:
             crud.deleteSolicitud(solicitudId)
@@ -342,7 +342,7 @@ def init_routes(app):
         except Exception as error:
             return errors.handleError(error)
     """
-    @api {delete} /v1/solucion/:solicitudId/excel Solicitar Excel de Calendarizacion
+    @api {GET} /v1/solucion/:solicitudId/excel Solicitar Excel de Calendarizacion
     @apiName Descargar Excel de la Solucion correspondiente al ID de Solicitud
     @apiGroup Calendarizacion
 
@@ -365,7 +365,7 @@ def init_routes(app):
             return errors.handleError(error)
 
     """
-    @api {delete} /v1/solucion/:solucionId/eliminar Eliminar Solucion
+    @api {delete} /v1/solucion/:solucionId Eliminar Solucion
     @apiName Eliminar una Solucion de la Base de Datos(Hard Delete)
     @apiGroup Calendarizacion
 
@@ -376,7 +376,7 @@ def init_routes(app):
 
     """
 
-    @app.route('/v1/solucion/<solucionId>/eliminar', methods=['DELETE'])
+    @app.route('/v1/solucion/<solucionId>', methods=['DELETE'])
     def eliminarCalendarizacion(solucionId):
         try:
             crud.deleteSolucion(solucionId)
