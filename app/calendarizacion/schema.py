@@ -22,6 +22,21 @@ SALA_LIST_SCHEMA = {
     }
 }
 
+TIPO_SCHEMA = {
+    "idTipo": {
+        "required": True,
+        "type": numbers.Integral,
+    },
+    "tiempoRealizacionMinimo": {
+        "required": True,
+        "type": numbers.Integral,
+    },
+    "tiempoRealizacionMaximo": {
+        "required": True,
+        "type": numbers.Integral,
+    }
+}
+
 SALA_SCHEMA = {
     "idSala": {
         "required": True,
@@ -108,7 +123,8 @@ AUDIENCIA_SCHEMA = {
     },
     'tipo': {
         "required": True,
-        "type": numbers.Integral,
+        "type": dict,
+        "childSchema": TIPO_SCHEMA
     },
     'almafuerte': {
         "required": True,
@@ -165,7 +181,8 @@ AUDIENCIA_FIJADA_SCHEMA = {
     },
     'tipo': {
         "required": True,
-        "type": numbers.Integral,
+        "type": dict,
+        "childSchema": TIPO_SCHEMA
     },
     'aLaTarde': {
         "required": True,
@@ -318,9 +335,63 @@ SOLCITUD_SCHEMA = {
     }
 }
 
+SOLCITUD_SANDBOX_SCHEMA = {
+    "sala": {
+        "required": True,
+        "type": list,
+        'minQuantity': 1,
+        "childSchema": SALA_LIST_SCHEMA
+    },
+    'turnoTardeJuez': {
+        "required": True,
+        "type": list,
+        'minQuantity': 1,
+        "childSchema": JUEZ_TIME_AFTERNOON_SCHEMA
+    },
+    'licenciaJuez': {
+        "required": True,
+        "type": list,
+        'minQuantity': 1,
+        "childSchema": JUEZ_TIME_LICENSE_SCHEMA
+    },
+    'indisposicionJuez': {
+        "required": True,
+        "type": list,
+        'minQuantity': 0,
+        "childSchema": JUEZ_TIME_SPECIAL_SCHEMA
+    },
+    "audiencia": {
+        "required": True,
+        "type": list,
+        'minQuantity': 1,
+        "childSchema": AUDIENCIA_SCHEMA
+    },
+    "audienciaFijada": {
+        "required": True,
+        "type": list,
+        'minQuantity': 0,
+        "childSchema": AUDIENCIA_FIJADA_SCHEMA
+    },
+    'urlNotificacion': {
+        "required": True,
+        "type": str,
+    },
+    'fechaSolicitud': {
+        "required": True,
+        "type": str,
+    }
+}
+
 
 def validarSolicitud(documento):
     err = validator.validateSchema(SOLCITUD_SCHEMA, documento)
+
+    if (len(err) > 0):
+        raise error.MultipleArgumentException(err)
+
+
+def validarSolicitudSandbox(documento):
+    err = validator.validateSchema(SOLCITUD_SANDBOX_SCHEMA, documento)
 
     if (len(err) > 0):
         raise error.MultipleArgumentException(err)

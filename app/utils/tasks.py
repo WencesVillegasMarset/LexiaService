@@ -1,5 +1,4 @@
 # import time
-import xmltodict
 import subprocess
 import logging
 import requests
@@ -8,28 +7,34 @@ import json
 import app.utils.config as config
 import datetime
 import app.calendarizacion.crud_service as crud
+import os
 
 
 SOLUTION_PATH = config.Config.SOLUTION_PATH
-
+DATA_PATH = config.Config.DATA_PATH
 
 def run_solver(data, solicitudId):
     logging.basicConfig(filename='solver.log',
                         filemode='a', level=logging.DEBUG,
                         format='%(asctime)s %(levelname)-8s %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
-
     today = datetime.datetime.today()
-    solicitud_filename = '{}-{}-{}.xml'.format(
-        today.year, today.month, today.day)
+    if len(data) == 5:
+        solicitud_filename = '{}-{}-{}.xml'.format(
+            today.year, today.month, today.day)
+    else:
+        solicitud_filename = '{}.xml'.format(data[5])
 
-    with open(solicitud_filename, 'w+') as result_file:
+    with open(os.path.join(DATA_PATH, 'unsolved', solicitud_filename), 'w+') as result_file:
         result_file.write(data[0])
-    with open('juezTimeGrainAfternoon.xml', 'w+') as result_file:
+
+    with open(os.path.join(DATA_PATH, 'JuezTimeGrainAfternoon.xml'), 'w+') as result_file:
         result_file.write(data[1])
-    with open('juezTimeGrainLicense.xml', 'w+') as result_file:
+
+    with open(os.path.join(DATA_PATH, 'JuezTimeGrainLicence.xml'), 'w+') as result_file:
         result_file.write(data[2])
-    with open('juezTimeGrainSpecial.xml', 'w+') as result_file:
+
+    with open(os.path.join(DATA_PATH, 'JuezTimeGrainSpecial.xml'), 'w+') as result_file:
         result_file.write(data[3])
 
     with subprocess.Popen(
@@ -37,13 +42,35 @@ def run_solver(data, solicitudId):
             stdout=subprocess.PIPE,
             cwd='./ogap-solver/optaplanner_examples_jar') as proc:
         logging.info(proc.stdout.read())
-
-    solucion = calendarizacion.xmlSolutionToDict(SOLUTION_PATH)
-    with open('solucion.json', 'w+') as res:
-        res.write(json.dumps(solucion))
-    crud.crearSolucion(solucion, solicitudId)
-    response = {
-        "solicitudId": id
-    }
-    requests.post(data[4], data=response)
+    try:
+        solucion = calendarizacion.xmlSolutionToDict(
+            os.path.join(SOLUTION_PATH, 'Result.xml'))
+        with open('solucion.json', 'w+') as res:
+            res.write(json.dumps(solucion))
+        crud.crearSolucion(solucion, solicitudId)
+        response = {
+            "solicitudId": solicitudId,
+            'success': True,
+        }
+        try:
+            requests.post(data[4], data=response)
+        except Exception:
+            logging.error("Error sending POST notification")
+    except FileNotFoundError:
+        response = {
+            "solicitudId": solicitudId,
+            'success': False,
+        }
+        try:
+            requests.post(data[4], data=response)
+        except Exception:
+            logging.error("Error sending POST notification")
+        return
+    # eliminar xml de resultados
+    os.remove(os.path.join(SOLUTION_PATH, 'Result.xml'))
+    os.rename(
+            os.path.join(os.path.split(SOLUTION_PATH)[0],
+                         'excel', 'Result.xlsx'),
+            os.path.join(os.path.split(SOLUTION_PATH)[0],
+                         'excel', str(solicitudId) + '.xlsx'))
     return data

@@ -13,6 +13,7 @@ def crearSolicitud(params):
 
     return solicitudId
 
+
 def crearSolucion(params, solicitudId):
 
     # Actualizamos los valores validos a actualizar
@@ -22,6 +23,7 @@ def crearSolucion(params, solicitudId):
     solucionId = db.soluciones.insert_one(params).inserted_id
 
     return solucionId
+
 
 def getSolicitud(solicitudId):
     try:
@@ -37,6 +39,28 @@ def getSolucion(solicitudId):
     try:
         query_params = {"solicitudId": bson.ObjectId(solicitudId)}
         result = db.soluciones.find_one(query_params)
+        if (not result):
+            raise error.InvalidArgument("_id", "Solucion does not exists")
+        return result
+    except Exception:
+        raise error.InvalidArgument("_id", "Invalid object id")
+
+
+def deleteSolicitud(solicitudId):
+    try:
+        query_params = {"_id": bson.ObjectId(solicitudId)}
+        result = db.soluciones.delete_one(query_params)
+        if (not result):
+            raise error.InvalidArgument("_id", "Solucion does not exists")
+        return result
+    except Exception:
+        raise error.InvalidArgument("_id", "Invalid object id")
+
+
+def deleteSolucion(solucionId):
+    try:
+        query_params = {"_id": bson.ObjectId(solucionId)}
+        result = db.soluciones.delete_one(query_params)
         if (not result):
             raise error.InvalidArgument("_id", "Solucion does not exists")
         return result

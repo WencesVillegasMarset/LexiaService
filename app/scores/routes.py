@@ -29,4 +29,21 @@ def init_routes(app):
         except Exception as error:
             return errors.handleError(error)
 
+    @app.route('/v1/scores/<scoresId>/activar', methods=['POST'])
+    def activarScores(scoresId):
+        try:
+            result = crud.updateScores(scoresId, {'activo': True})
+            return json.dic_to_json(result)
+
+        except Exception as error:
+            return errors.handleError(error)
+
+    @app.route('/v1/scores/<scoresId>/desactivar', methods=['POST'])
+    def desactivarScores(scoresId):
+        try:
+            result = crud.updateScores(scoresId, {'activo': False})
+            return json.dic_to_json(result)
+
+        except Exception as error:
+            return errors.handleError(error)
     return app

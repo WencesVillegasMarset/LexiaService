@@ -1,6 +1,7 @@
 import app.scores.crud_service as scores
 import app.utils.errors as errors
 import xmltodict
+import os
 
 
 ACTOR_LIST = ['juez', 'fiscal', 'asesor', 'querellante', 'defensor']
@@ -100,22 +101,27 @@ def _audienciaScheduleParser(data):
 
     for audiencia in data['audienciaFijada']:
         temp = {}
-        temp['fechaRealizacion'] = audiencia.pop('fechaRealizacion')
         temp['hora_comienzo'] = audiencia.pop('horaComienzo')
         temp['id'] = audiencia.pop('id')
         temp['audiencia'] = audiencia
+        temp['audiencia'][
+            'fechaRealizacion'] = audiencia.pop('fechaRealizacion')
+
         temp['room'] = room_dict[audiencia.pop('idSala')]
         temp['pinned'] = True
+
         audiencia_list.append(temp)
     for audiencia in audiencia_list:
         audiencia['audiencia']['boulogne'] = audiencia['audiencia'].pop('boulonge_sur_mer')
         audiencia['audiencia']['durationMinutes'] = audiencia['audiencia'].pop('duracion')
         audiencia['audiencia']['fechaPedido'] = audiencia['audiencia'].pop('fechaSolicitud')
         audiencia['audiencia']['almaFuerte'] = audiencia['audiencia'].pop('almafuerte')
-        audiencia['audiencia']['tipo'] = {'idTipo': audiencia['audiencia'].pop('tipo')}
+        # audiencia['audiencia']['tipo'] = {'idTipo': audiencia['audiencia'].pop('tipo')}
         if audiencia['pinned']:
             audiencia['audiencia']['startingMinuteOfDay'] = __getStartingMinuteofDay(
                 audiencia.pop('hora_comienzo'))
+        else:
+            audiencia['audiencia']['startingMinuteOfDay'] = 0
         for actor in ACTOR_LIST:
             if actor in audiencia['audiencia'].keys():
                 temp_actor = []
@@ -127,44 +133,38 @@ def _audienciaScheduleParser(data):
 
     try:
         constraint_conf = scores.getLatestScores()
-        temp = {}
-        for constraint in constraint_conf['constraintConfiguration']:
-            temp[constraint['nombreRestriccion']] = constraint[
-                'pesosRestriccion']
-        constraint_conf = temp
+        if constraint_conf['activo']:
+            temp = {}
+            for constraint in constraint_conf['constraintConfiguration']:
+                temp[constraint['nombreRestriccion']] = constraint[
+                    'pesosRestriccion']
+            constraint_conf = temp
     except Exception as err:
         errors.handleUnknown(err)
 
     xml_structure = {
         'AudienciaSchedule': {
-            'roomList': {
-                'audienciaAssignmentList': {
+            'audienciaAssignmentList': {
                     'AudienciaAssignment': audiencia_list
                 },
-                'constraintConfiguration': constraint_conf,
+            'roomList': {
                 'Room': room_dict.values(),
             },
         }
     }
+    if 'activo' not in constraint_conf.keys():
+        xml_structure['AudienciaSchedule'][
+            'constraintConfiguration'] = constraint_conf
 
     return xmltodict.unparse(xml_structure, pretty=True)
 
-'''
-def toXMLKeys(dictionary):
-    new_dict = {}
-    for key in dictionary.keys():
-        new_key = XML_TAG_MAPPINGS.get(key, key)
-        if isinstance(dictionary[key], dict):
-            new_dict[new_key] = toXMLKeys(dictionary[key])
-        else:
-            new_dict[new_key] = dictionary[key]
-    return new_dict
-'''
 
 def xmlSolutionToDict(xml_path):
     final_format = {
         'audiencia': [],
     }
+    if not os.path.exists(xml_path):
+        raise FileNotFoundError
     with open(xml_path) as fd:
         res = xmltodict.parse(fd.read())
     for key, audiencias in res['AudienciaSchedule']['audienciaAssignmentList'].items():
@@ -181,7 +181,7 @@ def xmlSolutionToDict(xml_path):
                 }
                 aud['horaAudiencia'] = __decimalToHs(int(aud['horaAudiencia'])/60)
                 final_format['audiencia'].append(aud)
-    
+
     return final_format
 
 

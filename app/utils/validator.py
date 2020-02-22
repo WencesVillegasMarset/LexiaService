@@ -31,7 +31,7 @@ def validateSchema(schema, document):
                 continue
             if schema_prop['type'] is dict:
                 sub_errors = validateSchema(
-                    schema_prop['child'], document_field)
+                    schema_prop['childSchema'], document_field)
                 errors = {**errors, **sub_errors}
                 continue
             if schema_prop['type'] is list:
