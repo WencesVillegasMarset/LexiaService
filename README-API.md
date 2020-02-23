@@ -88,7 +88,7 @@ HTTP/1.1 500 Server Error
 
 
 
-	DELETE /v1/solucion/:solicitudId/excel
+	GET /v1/solucion/:solicitudId/excel
 
 
 
@@ -143,7 +143,7 @@ HTTP/1.1 500 Server Error
 
 
 
-	DELETE /v1/solicitud/:solicitudId/eliminar
+	DELETE /v1/solicitud/:solicitudId
 
 
 
@@ -197,7 +197,7 @@ HTTP/1.1 500 Server Error
 
 
 
-	DELETE /v1/solucion/:solucionId/eliminar
+	DELETE /v1/solucion/:solucionId
 
 
 
