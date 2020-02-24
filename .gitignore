@@ -134,7 +134,7 @@ dmypy.json
 
 # project specific
 
-/app/utils/config.py
+# /app/utils/config.py
 solver.log
 # /public/
 .vscode/
