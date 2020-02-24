@@ -140,7 +140,7 @@ def _audienciaScheduleParser(data):
                     'pesosRestriccion']
             constraint_conf = temp
     except Exception as err:
-        errors.handleUnknown(err)
+        constraint_conf = None
 
     xml_structure = {
         'AudienciaSchedule': {
@@ -152,7 +152,7 @@ def _audienciaScheduleParser(data):
             },
         }
     }
-    if 'activo' not in constraint_conf.keys():
+    if constraint_conf and 'activo' not in constraint_conf.keys():
         xml_structure['AudienciaSchedule'][
             'constraintConfiguration'] = constraint_conf
 
