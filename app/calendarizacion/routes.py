@@ -14,6 +14,10 @@ import app.calendarizacion.service as service
 
 def init_routes(app):
 
+    @app.route('/<path:path>')
+    def api_index(path):
+        return flask.send_from_directory('../public', path)
+
     @app.route('/', methods=['GET'])
     def index():
         return flask.send_from_directory('../public', "index.html")
