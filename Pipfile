@@ -15,6 +15,7 @@ python-dotenv = "*"
 redis = "*"
 rq = "*"
 xmltodict = "*"
+gunicorn = {extras = ["gevent"],version = "*"}
 
 [requires]
 python_version = "3.8"

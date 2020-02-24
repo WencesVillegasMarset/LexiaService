@@ -136,6 +136,6 @@ dmypy.json
 
 /app/utils/config.py
 solver.log
-/public/
+# /public/
 .vscode/
 ogap-solver/
