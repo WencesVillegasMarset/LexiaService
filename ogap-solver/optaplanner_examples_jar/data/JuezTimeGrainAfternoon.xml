@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Days>
+	<Day>
+		<date>2020-03-27</date>
+		<Jueces>
+			<Juez>
+				<id>4</id>
+			</Juez>
+			<Juez>
+				<id>5</id>
+			</Juez>
+		</Jueces>
+	</Day>
+	<Day>
+		<date>2020-02-27</date>
+		<Jueces>
+			<Juez>
+				<id>2</id>
+			</Juez>
+			<Juez>
+				<id>1</id>
+			</Juez>
+		</Jueces>
+	</Day>
+	<Day>
+		<date>2020-03-03</date>
+		<Jueces>
+			<Juez>
+				<id>2</id>
+			</Juez>
+			<Juez>
+				<id>13</id>
+			</Juez>
+		</Jueces>
+	</Day>
+</Days>
