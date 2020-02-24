@@ -11,6 +11,24 @@ import app.feriados.crud_service as crud
 
 def init_routes(app):
 
+    """
+    @api {get} /v1/feriados/:anio Consultar Feriados
+    @apiName Consultar todos los feriados de un Año dado (anio)
+    @apiGroup Feriados
+
+    @apiSuccessExample {json} Response
+        HTTP/1.1 200 OK
+        [
+            {
+                dia':"{Numero del Dia [1-31]} Integer",
+                'mes':"{Numero del Mes [1-12]} Integer"
+                'motivo': "{Descripcion Opcional} String",
+            }
+        ]
+        @apiUse Errors
+
+    """
+
     @app.route('/v1/feriados/<year>', methods=['GET'])
     def consultarFeriados(year):
         try:
@@ -23,6 +41,38 @@ def init_routes(app):
 
         except Exception as error:
             return errors.handleError(error)
+
+    """
+    @api {post} /v1/feriados/ Crear Feriados
+    @apiName Cargar todos los feriados de un Año dado
+    @apiGroup Feriados
+
+    @apiExample {json} Body
+        {
+            "feriadoList": [ 
+                {
+                    'dia':"{Numero del Dia [1-31]} Integer",
+                    'mes':"{Numero del Mes [1-12]} Integer"
+                    'motivo': "{Descripcion Opcional} String",
+                }
+            ],
+            "anio": {"Año en el que acontecen los feriados" Integer}
+        }
+    @apiSuccessExample {json} Response
+        HTTP/1.1 200 OK
+        {
+            "feriadoList": [ 
+                {
+                    'dia':"{Numero del Dia [1-31]} Integer",
+                    'mes':"{Numero del Mes [1-12]} Integer"
+                    'motivo': "{Descripcion Opcional} String",
+                }
+            ],
+            "anio": "{Año en el que acontecen los feriados} Integer",
+            "created": "{Date}"
+        }
+        @apiUse Errors
+    """
 
     @app.route('/v1/feriados/', methods=['POST'])
     def cargarFeriados():
