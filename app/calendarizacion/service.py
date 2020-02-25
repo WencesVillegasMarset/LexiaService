@@ -116,7 +116,7 @@ def _audienciaScheduleParser(data):
         audiencia['audiencia']['durationMinutes'] = audiencia['audiencia'].pop('duracion')
         audiencia['audiencia']['fechaPedido'] = audiencia['audiencia'].pop('fechaSolicitud')
         audiencia['audiencia']['almaFuerte'] = audiencia['audiencia'].pop('almafuerte')
-        # audiencia['audiencia']['tipo'] = {'idTipo': audiencia['audiencia'].pop('tipo')}
+        audiencia['audiencia']['idAudiencia'] = audiencia['id']
         if audiencia['pinned']:
             audiencia['audiencia']['startingMinuteOfDay'] = __getStartingMinuteofDay(
                 audiencia.pop('hora_comienzo'))
