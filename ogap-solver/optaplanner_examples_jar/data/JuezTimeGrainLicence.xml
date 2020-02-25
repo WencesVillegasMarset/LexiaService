@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Jueces>
+	<Juez>
+		<id>1</id>
+		<dayfrom>2020-03-05</dayfrom>
+		<dayto>2020-03-15</dayto>
+	</Juez>
+</Jueces>

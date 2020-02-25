@@ -116,7 +116,7 @@ def _audienciaScheduleParser(data):
         audiencia['audiencia']['durationMinutes'] = audiencia['audiencia'].pop('duracion')
         audiencia['audiencia']['fechaPedido'] = audiencia['audiencia'].pop('fechaSolicitud')
         audiencia['audiencia']['almaFuerte'] = audiencia['audiencia'].pop('almafuerte')
-        # audiencia['audiencia']['tipo'] = {'idTipo': audiencia['audiencia'].pop('tipo')}
+        audiencia['audiencia']['idAudiencia'] = audiencia['id']
         if audiencia['pinned']:
             audiencia['audiencia']['startingMinuteOfDay'] = __getStartingMinuteofDay(
                 audiencia.pop('hora_comienzo'))
@@ -140,7 +140,7 @@ def _audienciaScheduleParser(data):
                     'pesosRestriccion']
             constraint_conf = temp
     except Exception as err:
-        errors.handleUnknown(err)
+        constraint_conf = None
 
     xml_structure = {
         'AudienciaSchedule': {
@@ -152,7 +152,7 @@ def _audienciaScheduleParser(data):
             },
         }
     }
-    if 'activo' not in constraint_conf.keys():
+    if constraint_conf and 'activo' not in constraint_conf.keys():
         xml_structure['AudienciaSchedule'][
             'constraintConfiguration'] = constraint_conf
 

@@ -11,6 +11,16 @@
 	- [Solicitar Calendarizacion](#solicitar-calendarizacion)
 	- [Solicitar Calendarizacion Modo Prueba](#solicitar-calendarizacion-modo-prueba)
 	
+- [Feriados](#feriados)
+	- [Crear Feriados](#crear-feriados)
+	- [Consultar Feriados](#consultar-feriados)
+	
+- [Scores](#scores)
+	- [Activar Scores](#activar-scores)
+	- [Crear Scores](#crear-scores)
+	- [Consultar Scores](#consultar-scores)
+	- [Desactivar Scores](#desactivar-scores)
+	
 
 
 # <a name='calendarizacion'></a> Calendarizacion
@@ -88,7 +98,7 @@ HTTP/1.1 500 Server Error
 
 
 
-	DELETE /v1/solucion/:solicitudId/excel
+	GET /v1/solucion/:solicitudId/excel
 
 
 
@@ -143,7 +153,7 @@ HTTP/1.1 500 Server Error
 
 
 
-	DELETE /v1/solicitud/:solicitudId/eliminar
+	DELETE /v1/solicitud/:solicitudId
 
 
 
@@ -197,7 +207,7 @@ HTTP/1.1 500 Server Error
 
 
 
-	DELETE /v1/solucion/:solucionId/eliminar
+	DELETE /v1/solucion/:solucionId
 
 
 
@@ -514,6 +524,366 @@ Response
 HTTP/1.1 200 OK
 {
     'solicitudId' : {ObjectId}
+}
+```
+
+
+### Error Response
+
+400 Bad Request
+
+```
+HTTP/1.1 400 Bad Request
+{
+    "path" : "{Nombre de la propiedad}",
+    "message" : "{Motivo del error}"
+}
+```
+400 Bad Request
+
+```
+HTTP/1.1 400 Bad Request
+{
+    "error" : "{Motivo del error}"
+}
+```
+500 Server Error
+
+```
+HTTP/1.1 500 Server Error
+{
+    "error" : "{Motivo del error}"
+}
+```
+# <a name='feriados'></a> Feriados
+
+## <a name='crear-feriados'></a> Crear Feriados
+[Back to top](#top)
+
+
+
+	POST /v1/feriados/
+
+
+
+### Examples
+
+Body
+
+```
+{
+    "feriadoList": [ 
+        {
+            'dia':"{Numero del Dia [1-31]} Integer",
+            'mes':"{Numero del Mes [1-12]} Integer"
+            'motivo': "{Descripcion Opcional} String",
+        }
+    ],
+    "anio": {"Año en el que acontecen los feriados" Integer}
+}
+```
+
+
+### Success Response
+
+Response
+
+```
+HTTP/1.1 200 OK
+{
+    "feriadoList": [ 
+        {
+            'dia':"{Numero del Dia [1-31]} Integer",
+            'mes':"{Numero del Mes [1-12]} Integer"
+            'motivo': "{Descripcion Opcional} String",
+        }
+    ],
+    "anio": "{Año en el que acontecen los feriados} Integer",
+    "created": "{Date}"
+}
+```
+
+
+### Error Response
+
+400 Bad Request
+
+```
+HTTP/1.1 400 Bad Request
+{
+    "path" : "{Nombre de la propiedad}",
+    "message" : "{Motivo del error}"
+}
+```
+400 Bad Request
+
+```
+HTTP/1.1 400 Bad Request
+{
+    "error" : "{Motivo del error}"
+}
+```
+500 Server Error
+
+```
+HTTP/1.1 500 Server Error
+{
+    "error" : "{Motivo del error}"
+}
+```
+## <a name='consultar-feriados'></a> Consultar Feriados
+[Back to top](#top)
+
+
+
+	GET /v1/feriados/:anio
+
+
+
+
+
+### Success Response
+
+Response
+
+```
+HTTP/1.1 200 OK
+[
+    {
+        dia':"{Numero del Dia [1-31]} Integer",
+        'mes':"{Numero del Mes [1-12]} Integer"
+        'motivo': "{Descripcion Opcional} String",
+    }
+]
+```
+
+
+### Error Response
+
+400 Bad Request
+
+```
+HTTP/1.1 400 Bad Request
+{
+    "path" : "{Nombre de la propiedad}",
+    "message" : "{Motivo del error}"
+}
+```
+400 Bad Request
+
+```
+HTTP/1.1 400 Bad Request
+{
+    "error" : "{Motivo del error}"
+}
+```
+500 Server Error
+
+```
+HTTP/1.1 500 Server Error
+{
+    "error" : "{Motivo del error}"
+}
+```
+# <a name='scores'></a> Scores
+
+## <a name='activar-scores'></a> Activar Scores
+[Back to top](#top)
+
+
+
+	PATCH /v1/scores/:scoresId/activar
+
+
+
+
+
+### Success Response
+
+Response
+
+```
+HTTP/1.1 200 OK
+{
+    "_id": "{ObjectId}",
+}
+```
+
+
+### Error Response
+
+400 Bad Request
+
+```
+HTTP/1.1 400 Bad Request
+{
+    "path" : "{Nombre de la propiedad}",
+    "message" : "{Motivo del error}"
+}
+```
+400 Bad Request
+
+```
+HTTP/1.1 400 Bad Request
+{
+    "error" : "{Motivo del error}"
+}
+```
+500 Server Error
+
+```
+HTTP/1.1 500 Server Error
+{
+    "error" : "{Motivo del error}"
+}
+```
+## <a name='crear-scores'></a> Crear Scores
+[Back to top](#top)
+
+
+
+	POST /v1/scores/
+
+
+
+### Examples
+
+Body
+
+```
+{
+    "constraintConfiguration": [
+        {
+            'nombreRestriccion':"{Nombre de la restriccion} String",
+            'pesosRestriccion':"{Pesos de la restriccion (X => Entero)[XX/XX/XX/XX/XX]} String"
+        }
+    ]
+}
+```
+
+
+### Success Response
+
+Response
+
+```
+HTTP/1.1 200 OK
+{
+    "constraintConfiguration": [
+        {
+            'nombreRestriccion':"{Nombre de la restriccion} String",
+            'pesosRestriccion':"{Pesos de la restriccion (X => Entero)[XX/XX/XX/XX/XX]} String"
+        }
+    ],
+    "activo": False,
+    "_id": "{ObjectId}",
+}
+```
+
+
+### Error Response
+
+400 Bad Request
+
+```
+HTTP/1.1 400 Bad Request
+{
+    "path" : "{Nombre de la propiedad}",
+    "message" : "{Motivo del error}"
+}
+```
+400 Bad Request
+
+```
+HTTP/1.1 400 Bad Request
+{
+    "error" : "{Motivo del error}"
+}
+```
+500 Server Error
+
+```
+HTTP/1.1 500 Server Error
+{
+    "error" : "{Motivo del error}"
+}
+```
+## <a name='consultar-scores'></a> Consultar Scores
+[Back to top](#top)
+
+
+
+	POST /v1/scores/:scoresId
+
+
+
+
+
+### Success Response
+
+Response
+
+```
+HTTP/1.1 200 OK
+{
+    "constraintConfiguration": [
+        {
+            'nombreRestriccion':"{Nombre de la restriccion} String",
+            'pesosRestriccion':"{Pesos de la restriccion (X => Entero)[XX/XX/XX/XX/XX]} String"
+        }
+    ],
+    "activo": "Boolean",
+    "_id": "{ObjectId}",
+}
+```
+
+
+### Error Response
+
+400 Bad Request
+
+```
+HTTP/1.1 400 Bad Request
+{
+    "path" : "{Nombre de la propiedad}",
+    "message" : "{Motivo del error}"
+}
+```
+400 Bad Request
+
+```
+HTTP/1.1 400 Bad Request
+{
+    "error" : "{Motivo del error}"
+}
+```
+500 Server Error
+
+```
+HTTP/1.1 500 Server Error
+{
+    "error" : "{Motivo del error}"
+}
+```
+## <a name='desactivar-scores'></a> Desactivar Scores
+[Back to top](#top)
+
+
+
+	PATCH /v1/scores/:scoresId/desactivar
+
+
+
+
+
+### Success Response
+
+Response
+
+```
+HTTP/1.1 200 OK
+{
+    "_id": "{ObjectId}",
 }
 ```
 

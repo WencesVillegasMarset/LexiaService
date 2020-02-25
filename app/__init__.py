@@ -1,5 +1,4 @@
 from flask import Flask
-import os
 from rq import Queue
 from redis import Redis
 import app.calendarizacion.routes as calendarizacion
@@ -7,7 +6,8 @@ import app.feriados.routes as feriados
 import app.scores.routes as scores
 import app.utils.config as config
 
-app = Flask(__name__, static_folder=os.path.join('..', 'public'))
+
+app = Flask(__name__, static_folder='../public')
 # inicializo rutas de la app
 app = calendarizacion.init_routes(app)
 app = feriados.init_routes(app)
