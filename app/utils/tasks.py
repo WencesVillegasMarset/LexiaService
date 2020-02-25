@@ -45,8 +45,6 @@ def run_solver(data, solicitudId):
     try:
         solucion = calendarizacion.xmlSolutionToDict(
             os.path.join(SOLUTION_PATH, 'Result.xml'))
-        with open('solucion.json', 'w+') as res:
-            res.write(json.dumps(solucion))
         crud.crearSolucion(solucion, solicitudId)
         response = {
             "solicitudId": solicitudId,
