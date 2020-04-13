@@ -144,7 +144,7 @@ AUDIENCIA_SCHEMA = {
     },
     'id': {
         "required": True,
-        "type": str,
+        "type": numbers.Integral,
     }
 }
 
@@ -230,7 +230,7 @@ AUDIENCIA_FIJADA_SCHEMA = {
     },
     'id': {
         "required": True,
-        "type": str,
+        "type": numbers.Integral,
     }
 }
 
