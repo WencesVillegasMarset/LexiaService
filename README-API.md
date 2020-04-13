@@ -30,7 +30,7 @@
 
 
 
-	GET /v1/calendarizacion/:solicitudId
+	GET /v1/solicitud/:solicitudId
 
 
 
@@ -261,7 +261,7 @@ HTTP/1.1 500 Server Error
 
 
 
-	POST /v1/calendarizacion/
+	POST /v1/solicitud/
 
 
 
@@ -298,7 +298,12 @@ Body
             }],
             'riesgosa': "{Hay alto riesgo de que se extienda mas de la duracion estimaada?} Boolean",
             'detenido': "{Tiene Detenidos?} Boolean",
-            'tipo': "{ID del tipo de la audiencia} Integer",
+            'tipo': {
+                'idTipo':"{ID del tipo de la audiencia} Integer",
+                'tiempoRealizacionMinimo':"{Numero de dias minimo para fijacion} Integer",
+                'tiempoRealizacionMaximo':"{Numero de dias minimo para fijacion} Integer",
+            },
+            'aLaTarde': "{Indica si debe realizarse obligatoriamente a la tarde}Boolean"
             'almafuerte': "{True si es en Almafuerte } Boolean",
             'boulonge_sur_mer': "{True si es en Boulonge Sur Mer} Boolean",
             'fechaSolicitud': "{Fecha en la que fue solicitada la Audiencia} String (YYYY-MM-DD),
@@ -331,6 +336,7 @@ Body
                 'tiempoRealizacionMinimo':"{Numero de dias minimo para fijacion} Integer",
                 'tiempoRealizacionMaximo':"{Numero de dias minimo para fijacion} Integer",
             }
+            'aLaTarde': "{Indica si debe realizarse obligatoriamente a la tarde}Boolean"
             'almafuerte': "{True si es en Almafuerte } Boolean",
             'boulonge_sur_mer': "{True si es en Boulonge Sur Mer} Boolean",
             'fechaSolicitud': "{Fecha en la que fue solicitada la Audiencia} String (YYYY-MM-DD),
@@ -409,7 +415,7 @@ HTTP/1.1 500 Server Error
 
 
 
-	POST /v1/calendarizacion/sandbox
+	POST /v1/solicitud/sandbox
 
 
 
@@ -446,7 +452,12 @@ Body
             }],
             'riesgosa': "{Hay alto riesgo de que se extienda mas de la duracion estimaada?} Boolean",
             'detenido': "{Tiene Detenidos?} Boolean",
-            'tipo': "{ID del tipo de la audiencia} Integer",
+            'tipo': {
+                'idTipo':"{ID del tipo de la audiencia} Integer",
+                'tiempoRealizacionMinimo':"{Numero de dias minimo para fijacion} Integer",
+                'tiempoRealizacionMaximo':"{Numero de dias minimo para fijacion} Integer",
+            },
+            'aLaTarde': "{Indica si debe realizarse obligatoriamente a la tarde}Boolean"
             'almafuerte': "{True si es en Almafuerte } Boolean",
             'boulonge_sur_mer': "{True si es en Boulonge Sur Mer} Boolean",
             'fechaSolicitud': "{Fecha en la que fue solicitada la Audiencia} String (YYYY-MM-DD),
@@ -478,7 +489,8 @@ Body
                 'idTipo':"{ID del tipo de la audiencia} Integer",
                 'tiempoRealizacionMinimo':"{Numero de dias minimo para fijacion} Integer",
                 'tiempoRealizacionMaximo':"{Numero de dias minimo para fijacion} Integer",
-            }
+            },
+            'aLaTarde': "{Indica si debe realizarse obligatoriamente a la tarde}Boolean"
             'almafuerte': "{True si es en Almafuerte } Boolean",
             'boulonge_sur_mer': "{True si es en Boulonge Sur Mer} Boolean",
             'fechaSolicitud': "{Fecha en la que fue solicitada la Audiencia} String (YYYY-MM-DD),

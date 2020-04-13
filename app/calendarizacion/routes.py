@@ -23,7 +23,7 @@ def init_routes(app):
         return flask.send_from_directory('../public', "index.html")
 
     """
-    @api {post} /v1/calendarizacion/ Solicitar Calendarizacion
+    @api {post} /v1/solicitud/ Solicitar Calendarizacion
     @apiName Hacer Solicitud de Calendarizacion
     @apiGroup Calendarizacion
 
@@ -186,7 +186,7 @@ def init_routes(app):
             return errors.handleError(error)
 
     """
-    @api {post} /v1/calendarizacion/sandbox Solicitar Calendarizacion Modo Prueba
+    @api {post} /v1/solicitud/sandbox Solicitar Calendarizacion Modo Prueba
     @apiName Hacer Solicitud de Calendarizacion Modo Prueba
     @apiGroup Calendarizacion
 
@@ -324,7 +324,7 @@ def init_routes(app):
             return errors.handleError(error)
 
     """
-    @api {get} /v1/calendarizacion/:solicitudId Solicitar Solucion
+    @api {get} /v1/solicitud/:solicitudId Solicitar Solucion
     @apiName Consultar resultado de una Solicitud
     @apiGroup Calendarizacion
 
