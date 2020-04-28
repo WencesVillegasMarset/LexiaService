@@ -164,6 +164,43 @@ def init_routes(app):
 
         except Exception as error:
             return errors.handleError(error)
+    
+    """
+    @api {get} /v1/solicitud/listar?start={integer} Listar Solicitudes
+    @apiName Listar solicitudes de forma paginada, start opcional
+    @apiGroup Calendarizacion
+
+    @apiExample
+    @apiSuccessExample {200} Response
+        HTTP/1.1 200 OK
+        {   
+            'total': {Integer}
+            'results':[
+                {
+                    '_id' : {ObjectId}
+                }
+            ],
+            'previous': {String},
+            'next': {String}
+            'start': {Integer}
+            'limit': {Integer}
+        }
+        
+        @apiUse Errors
+    """
+    @app.route('/v1/solicitud/listar', methods=['GET'])
+    def listarSolicitudes():
+        try:
+            start = flask.request.args.get('start', 0)
+            result = crud.getSolicitudList(url='/v1/solicitud/listar', start=int(start), pagesize=10)
+            result['start'] = start
+            result['limit'] = 10
+            return json.dic_to_json(result)
+
+        except Exception as error:
+            return errors.handleError(error)
+
+    
     """
     @api {delete} /v1/solicitud/:solicitudId Eliminar Solicitud
     @apiName Eliminar una Solicitud de la Base de Datos(Hard Delete)
@@ -172,6 +209,9 @@ def init_routes(app):
     @apiExample
     @apiSuccessExample {200} Response
         HTTP/1.1 200 OK
+        {
+            'solicitudId' : {ObjectId}
+        }
         @apiUse Errors
 
     """

@@ -35,6 +35,29 @@ def getSolicitud(solicitudId):
         raise error.InvalidArgument("_id", "Invalid object id")
 
 
+def getSolicitudList(url, start, pagesize):
+    # try:
+    result = {}
+    result['total'] = db.solicitudes.count_documents(filter={})
+    if result['total'] < start:
+        raise error.InvalidArgument("start", "Invalid start number")
+    if start == 0:
+        result['results'] = list(db.solicitudes.find(projection={}).limit(pagesize))
+        result['previous'] = ''
+    else:
+        result['results'] = list(db.solicitudes.find(projection={}).skip(start).limit(pagesize))
+        result['previous'] = url + '?start={}'.format(start-pagesize)
+
+    if result['total'] > start + pagesize:
+        result['next'] = url + '?start={}'.format(start+pagesize)
+    else:
+        result['next'] = ''
+
+    return result
+
+    # except Exception:
+        
+
 def getSolucion(solicitudId):
     try:
         query_params = {"solicitudId": bson.ObjectId(solicitudId)}
