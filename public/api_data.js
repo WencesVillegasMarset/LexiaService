@@ -1,7 +1,7 @@
 define({ "api": [
   {
     "type": "get",
-    "url": "/v1/solicitud/:solicitudId",
+    "url": "/v1/solucion/:solicitudId",
     "title": "Solicitar Solucion",
     "name": "Consultar_resultado_de_una_Solicitud",
     "group": "Calendarizacion",

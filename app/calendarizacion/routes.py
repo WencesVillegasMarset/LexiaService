@@ -324,7 +324,7 @@ def init_routes(app):
             return errors.handleError(error)
 
     """
-    @api {get} /v1/solicitud/:solicitudId Solicitar Solucion
+    @api {get} /v1/solucion/:solicitudId Solicitar Solucion
     @apiName Consultar resultado de una Solicitud
     @apiGroup Calendarizacion
 

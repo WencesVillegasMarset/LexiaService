@@ -30,7 +30,7 @@
 
 
 
-	GET /v1/solicitud/:solicitudId
+	GET /v1/solucion/:solicitudId
 
 
 
