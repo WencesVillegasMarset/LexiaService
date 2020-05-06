@@ -43,9 +43,11 @@ def run_solver(data, solicitudId):
             cwd='./ogap-solver/optaplanner_examples_jar') as proc:
         logging.info(proc.stdout.read())
     try:
+        logging.debug(os.path.exists(os.path.join(SOLUTION_PATH, 'Result.xml')))
         solucion = calendarizacion.xmlSolutionToDict(
             os.path.join(SOLUTION_PATH, 'Result.xml'))
-        crud.crearSolucion(solucion, solicitudId)
+        solucion_id = crud.crearSolucion(solucion, solicitudId)
+        logging.debug(solucion_id)
         response = {
             "solicitudId": solicitudId,
             'success': True,
