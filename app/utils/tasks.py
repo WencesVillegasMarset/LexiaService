@@ -69,7 +69,6 @@ def run_solver(data, solicitudId):
         os.remove(os.path.join(DATA_PATH, 'unsolved', solicitud_filename))
     except FileNotFoundError:
         pass
-    os.remove(os.path.join(SOLUTION_PATH, 'Result.xml'))
     os.rename(
             os.path.join(os.path.split(SOLUTION_PATH)[0],
                          'excel', 'Result.xlsx'),
