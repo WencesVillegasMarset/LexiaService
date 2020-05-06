@@ -65,6 +65,7 @@ def run_solver(data, solicitudId):
             logging.error("Error sending POST notification")
         return
     # eliminar xml de resultados
+    os.remove(os.path.join(DATA_PATH, 'unsolved', solicitud_filename))
     os.remove(os.path.join(SOLUTION_PATH, 'Result.xml'))
     os.rename(
             os.path.join(os.path.split(SOLUTION_PATH)[0],
